@@ -1,8 +1,10 @@
 package app
 
 import (
+	"EffectiveMobileTestTask/internal/config"
+	"EffectiveMobileTestTask/internal/handlers"
 	"context"
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"os"
@@ -12,7 +14,7 @@ const defaultPort = "8080"
 
 type App struct {
 	serviceProvider *serviceProvider
-	router          *mux.Router
+	router          *gin.Engine
 }
 
 func NewApp(ctx context.Context) (*App, error) {
@@ -26,6 +28,7 @@ func NewApp(ctx context.Context) (*App, error) {
 
 func (a *App) initDeps(ctx context.Context) error {
 	inits := []func(context.Context) error{
+		a.initConfig,
 		a.initServiceProvider,
 		a.initServer,
 	}
@@ -45,7 +48,12 @@ func (a *App) Run() error {
 }
 
 func (a *App) initServer(ctx context.Context) error {
+	a.router = handlers.SetupRoutes(a.serviceProvider.userHandler, a.serviceProvider.taskHandler)
+	return nil
+}
 
+func (a *App) initConfig(_ context.Context) error {
+	config.LoadConfig()
 	return nil
 }
 

@@ -9,12 +9,14 @@ import (
 var CONFIG Config
 
 type Config struct {
-	DBHost     string
-	DBPort     string
-	DBUser     string
-	DBPassword string
-	DBName     string
-	APIUrl     string
+	DB struct {
+		Host     string
+		Port     string
+		User     string
+		Password string
+		Name     string
+	}
+	APIUrl string
 }
 
 func LoadConfig() {
@@ -24,11 +26,19 @@ func LoadConfig() {
 	}
 
 	CONFIG = Config{
-		DBHost:     os.Getenv("DB_HOST"),
-		DBPort:     os.Getenv("DB_PORT"),
-		DBUser:     os.Getenv("DB_USER"),
-		DBPassword: os.Getenv("DB_PASSWORD"),
-		DBName:     os.Getenv("DB_NAME"),
-		APIUrl:     os.Getenv("API_URL"),
+		DB: struct {
+			Host     string
+			Port     string
+			User     string
+			Password string
+			Name     string
+		}{
+			Host:     os.Getenv("DB_HOST"),
+			Port:     os.Getenv("DB_PORT"),
+			User:     os.Getenv("DB_USER"),
+			Password: os.Getenv("DB_PASSWORD"),
+			Name:     os.Getenv("DB_NAME"),
+		},
+		APIUrl: os.Getenv("API_URL"),
 	}
 }
