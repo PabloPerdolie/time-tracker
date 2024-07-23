@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS tasks (
     description VARCHAR(255) NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP,
-    duration INTEGER DEFAULT 0,
+    duration VARCHAR(100) DEFAULT 0,
     created_at TIMESTAMP NOT NULL,
     updated_at TIMESTAMP
 );

@@ -32,7 +32,7 @@ func NewTaskHandler(t services.TasksService) TaskHandler {
 // @Success 200 {array} models.Task
 // @Failure 400 {object} map[string]interface{} "Bad Request"
 // @Failure 500 {object} map[string]interface{} "Internal Server Error"
-// @Router /tasks/{id}/users [get]
+// @Router /tasks/user/{id} [get]
 func (th *taskHandler) GetTasksByUser(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -40,8 +40,14 @@ func (th *taskHandler) GetTasksByUser(c *gin.Context) {
 		return
 	}
 	startDate := c.Query("start_date")
-	endDate := c.Query("end_date")
+	if startDate == "" {
+		startDate = "1970-01-01"
+	}
 
+	endDate := c.Query("end_date")
+	if endDate == "" {
+		endDate = time.Now().Format("2006-01-02")
+	}
 	tasks, err := th.taskService.GetTasksByUser(userID, startDate, endDate)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
