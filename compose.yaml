@@ -13,13 +13,13 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=graphqlDb
+      - POSTGRES_DB=time_tracker_db
     image: postgres:latest
     restart: always
     ports:
       - 5432:5432
     volumes:
-      - ./scripts/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+#      - ./scripts/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
       - db-data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]

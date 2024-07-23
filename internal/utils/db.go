@@ -5,7 +5,10 @@ import (
 	"fmt"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"log"
+	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -33,7 +36,15 @@ func runMigrations(sourceUrl, dbname string, db *sql.DB) {
 		log.Fatalf("could not create postgres driver: %v", err)
 	}
 
-	m, err := migrate.NewWithDatabaseInstance(sourceUrl, dbname, driver)
+	wd, err := os.Getwd()
+	if err != nil {
+		log.Fatalf("could not get work directory: %v", err)
+	}
+
+	// Строим абсолютный путь к директории миграций
+	migrationsPath := filepath.Join(wd, "migrations")
+
+	m, err := migrate.NewWithDatabaseInstance("file://"+migrationsPath, dbname, driver)
 	if err != nil {
 		log.Fatalf("could not create migrate instance: %v", err)
 	}

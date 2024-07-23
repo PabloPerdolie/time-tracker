@@ -15,4 +15,8 @@ FROM alpine as final
 
 COPY --from=build /usr/local/src/bin/app /
 
+COPY .env /
+
+COPY ./migrations /migrations
+
 CMD ["/app"]
