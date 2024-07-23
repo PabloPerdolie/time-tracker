@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func SetupRoutes(userHandler UserHandler, taskHandler TaskHandler) *gin.Engine {
@@ -21,6 +23,8 @@ func SetupRoutes(userHandler UserHandler, taskHandler TaskHandler) *gin.Engine {
 		taskGroup.POST("/start", taskHandler.StartTask)
 		taskGroup.POST("/end", taskHandler.EndTask)
 	}
+
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	return r
 }

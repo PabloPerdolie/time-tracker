@@ -9,16 +9,30 @@ import (
 	"time"
 )
 
+// taskHandler handles task-related requests
 type taskHandler struct {
 	taskService services.TasksService
 }
 
+// NewTaskHandler creates a new taskHandler
 func NewTaskHandler(t services.TasksService) TaskHandler {
 	return &taskHandler{
 		taskService: t,
 	}
 }
 
+// GetTasksByUser
+// @Summary Get tasks by user ID
+// @Description Get a list of tasks for a specific user within an optional date range
+// @Tags tasks
+// @Produce json
+// @Param id path int true "User ID"
+// @Param start_date query string false "Start date in YYYY-MM-DD format"
+// @Param end_date query string false "End date in YYYY-MM-DD format"
+// @Success 200 {array} models.Task
+// @Failure 400 {object} map[string]interface{} "Bad Request"
+// @Failure 500 {object} map[string]interface{} "Internal Server Error"
+// @Router /tasks/{id}/users [get]
 func (th *taskHandler) GetTasksByUser(c *gin.Context) {
 	userID, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -37,6 +51,17 @@ func (th *taskHandler) GetTasksByUser(c *gin.Context) {
 	c.JSON(http.StatusOK, tasks)
 }
 
+// StartTask
+// @Summary Start a new task
+// @Description Start a new task with the given details
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param task body models.Task true "Task data"
+// @Success 200 {object} models.Task
+// @Failure 400 {object} map[string]interface{} "Bad Request"
+// @Failure 500 {object} map[string]interface{} "Internal Server Error"
+// @Router /tasks/start [post]
 func (th *taskHandler) StartTask(c *gin.Context) {
 	var task models.Task
 	if err := c.ShouldBindJSON(&task); err != nil {
@@ -57,6 +82,17 @@ func (th *taskHandler) StartTask(c *gin.Context) {
 	c.JSON(http.StatusOK, task)
 }
 
+// EndTask
+// @Summary End a task
+// @Description End an existing task with the given details
+// @Tags tasks
+// @Accept json
+// @Produce json
+// @Param task body models.Task true "Task data"
+// @Success 200 {object} models.Task
+// @Failure 400 {object} map[string]interface{} "Bad Request"
+// @Failure 500 {object} map[string]interface{} "Internal Server Error"
+// @Router /tasks/end [post]
 func (th *taskHandler) EndTask(c *gin.Context) {
 	var task models.Task
 	if err := c.ShouldBindJSON(&task); err != nil {
@@ -66,7 +102,7 @@ func (th *taskHandler) EndTask(c *gin.Context) {
 
 	task.EndTime = time.Now()
 	task.UpdatedAt = time.Now()
-	task.Duration = time.Until(task.StartTime)
+	task.Duration = time.Until(task.StartTime).String()
 
 	err := th.taskService.EndTask(&task)
 	if err != nil {
