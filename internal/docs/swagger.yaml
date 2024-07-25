@@ -52,20 +52,15 @@ info:
   title: Time Tracker API
   version: "1.0"
 paths:
-  /tasks/end/{id}/{taskId}:
+  /tasks/end/{taskId}:
     post:
       consumes:
       - application/json
       description: End an existing task with the given details
       parameters:
-      - description: User ID
-        in: path
-        name: id
-        required: true
-        type: integer
       - description: Task ID
         in: path
-        name: taskId
+        name: id
         required: true
         type: integer
       produces:

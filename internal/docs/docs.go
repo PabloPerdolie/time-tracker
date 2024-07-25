@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/tasks/end/{id}/{taskId}": {
+        "/tasks/end/{taskId}": {
             "post": {
                 "description": "End an existing task with the given details",
                 "consumes": [
@@ -31,15 +31,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "User ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
                         "description": "Task ID",
-                        "name": "taskId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
