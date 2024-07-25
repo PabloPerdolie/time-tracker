@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"EffectiveMobileTestTask/internal/models"
 	"EffectiveMobileTestTask/internal/services"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -46,7 +45,7 @@ func (th *taskHandler) GetTasksByUser(c *gin.Context) {
 
 	endDate := c.Query("end_date")
 	if endDate == "" {
-		endDate = time.Now().Format("2006-01-02")
+		endDate = time.Now().Format("2025-01-02")
 	}
 	tasks, err := th.taskService.GetTasksByUser(userID, startDate, endDate)
 	if err != nil {
@@ -63,25 +62,30 @@ func (th *taskHandler) GetTasksByUser(c *gin.Context) {
 // @Tags tasks
 // @Accept json
 // @Produce json
-// @Param task body models.Task true "Task data"
+// @Param id path int true "User ID"
+// @Param description body string true "Task description"
 // @Success 200 {object} models.Task
 // @Failure 400 {object} map[string]interface{} "Bad Request"
 // @Failure 500 {object} map[string]interface{} "Internal Server Error"
-// @Router /tasks/start [post]
+// @Router /tasks/start/{id} [post]
 func (th *taskHandler) StartTask(c *gin.Context) {
-	var task models.Task
-	if err := c.ShouldBindJSON(&task); err != nil {
+	userID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	task.StartTime = time.Now()
-	task.CreatedAt = time.Now()
-	task.UpdatedAt = time.Now()
+	var description struct {
+		desc string `json:"description"`
+	}
+	if err := c.ShouldBindJSON(&description); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
 
-	err := th.taskService.StartTask(&task)
+	task, err := th.taskService.StartTask(userID, description.desc)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to start task"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
@@ -94,25 +98,21 @@ func (th *taskHandler) StartTask(c *gin.Context) {
 // @Tags tasks
 // @Accept json
 // @Produce json
-// @Param task body models.Task true "Task data"
+// @Param id path int true "Task ID"
 // @Success 200 {object} models.Task
 // @Failure 400 {object} map[string]interface{} "Bad Request"
 // @Failure 500 {object} map[string]interface{} "Internal Server Error"
-// @Router /tasks/end [post]
+// @Router /tasks/end/{taskId} [post]
 func (th *taskHandler) EndTask(c *gin.Context) {
-	var task models.Task
-	if err := c.ShouldBindJSON(&task); err != nil {
+	taskID, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	task.EndTime = time.Now()
-	task.UpdatedAt = time.Now()
-	task.Duration = time.Until(task.StartTime).String()
-
-	err := th.taskService.EndTask(&task)
+	task, err := th.taskService.EndTask(taskID)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Unable to end task"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 

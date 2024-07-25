@@ -20,8 +20,8 @@ func SetupRoutes(userHandler UserHandler, taskHandler TaskHandler) *gin.Engine {
 	taskGroup := r.Group("/tasks")
 	{
 		taskGroup.GET("/user/:id", taskHandler.GetTasksByUser)
-		taskGroup.POST("/start", taskHandler.StartTask)
-		taskGroup.POST("/end", taskHandler.EndTask)
+		taskGroup.POST("/start/:id", taskHandler.StartTask)
+		taskGroup.POST("/end/:id", taskHandler.EndTask)
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

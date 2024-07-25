@@ -19,10 +19,10 @@ func (t *taskService) GetTasksByUser(userID int, startDate, endDate string) ([]*
 	return t.taskRepo.GetByUser(userID, startDate, endDate)
 }
 
-func (t *taskService) StartTask(task *models.Task) error {
-	return t.taskRepo.Create(task)
+func (t *taskService) StartTask(userID int, desc string) (*models.Task, error) {
+	return t.taskRepo.Create(userID, desc)
 }
 
-func (t *taskService) EndTask(task *models.Task) error {
-	return t.taskRepo.Update(task)
+func (t *taskService) EndTask(taskID int) (*models.Task, error) {
+	return t.taskRepo.Update(taskID)
 }

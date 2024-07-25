@@ -12,6 +12,6 @@ type UserService interface {
 
 type TasksService interface {
 	GetTasksByUser(userID int, startDate, endDate string) ([]*models.Task, error)
-	StartTask(task *models.Task) error
-	EndTask(task *models.Task) error
+	StartTask(userID int, desc string) (*models.Task, error)
+	EndTask(taskID int) (*models.Task, error)
 }

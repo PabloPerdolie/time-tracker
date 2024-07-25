@@ -72,7 +72,7 @@ func (r *userRepository) Update(user *models.User) error {
 		address = $6, 
 		updated_at = $7 
 		WHERE id = $8`
-	_, err := r.db.Exec(query,
+	result, err := r.db.Exec(query,
 		user.PassportSeries,
 		user.PassportNumber,
 		user.Surname,
@@ -81,11 +81,38 @@ func (r *userRepository) Update(user *models.User) error {
 		user.Address,
 		user.UpdatedAt,
 		user.ID)
+
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error checking rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("user with id %d does not exist", user.ID)
+	}
+
 	return err
 }
 
 func (r *userRepository) Delete(id int) error {
-	query := `DELETE FROM users WHERE id = $1`
-	_, err := r.db.Exec(query, id)
-	return err
+	deleteQuery := `DELETE FROM users WHERE id = $1`
+	result, err := r.db.Exec(deleteQuery, id)
+	if err != nil {
+		return err
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error checking rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("user with id %d does not exist", id)
+	}
+
+	return nil
 }

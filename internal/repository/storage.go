@@ -14,6 +14,6 @@ type UserRepository interface {
 
 type TaskRepository interface {
 	GetByUser(userID int, startDate, endDate string) ([]*models.Task, error)
-	Create(task *models.Task) error
-	Update(task *models.Task) error
+	Create(userID int, desc string) (*models.Task, error)
+	Update(id int) (*models.Task, error)
 }
