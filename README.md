@@ -63,9 +63,93 @@ You can use Postman to test this API.
     ````
 - **Response**:
   - `201 Created` New account created.
+    - Sample response:
+       ````json
+       {
+          "address": "string",
+          "created_at": "string",
+          "id": 0,
+          "name": "string",
+          "passport_number": "string",
+          "passport_series": "string",
+          "patronymic": "string",
+          "surname": "string",
+          "updated_at": "string"
+       }
+       ````
   - `400 Bad Request`: Invalid request.
   - `500 Internal Server Error`: Server error.
 
+#### Create New Task
 
+- **URL**: `/tasks/start/{id}`
+- **Method**: `POST`
+- **Request Body**:
+    ````json
+    {
+      "description": "Task n"
+    }
+    ````
+- **Response**:
+  - `200 OK` New task created.
+    - Sample response:
+       ````json
+       {
+          "created_at": "string",
+          "description": "string",
+          "duration": "string",
+          "end_time": "string",
+          "id": 0,
+          "start_time": "string",
+          "updated_at": "string",
+          "user_id": 0
+       }
+       ````
+  - `400 Bad Request`: Invalid request.
+  - `500 Internal Server Error`: Server error.
+
+#### End Task
+
+- **URL**: `/tasks/end/{taskId}`
+- **Method**: `POST`
+- **Response**:
+  - `200 OK` Task ended.
+    - Sample response:
+         ````json
+         {
+            "created_at": "string",
+            "description": "string",
+            "duration": "string",
+            "end_time": "string",
+            "id": 0,
+            "start_time": "string",
+            "updated_at": "string",
+            "user_id": 0
+         }
+         ````
+  - `400 Bad Request`: Invalid request.
+  - `500 Internal Server Error`: Server error.
+
+#### Get Tasks by User with period
+
+- **URL**: `/tasks/user/{id}`
+- **Method**: `GET`
+- **Response**:
+  - `200 OK`.
+    - Sample response:
+       ````json
+       [
+        {
+            "created_at": "string",
+            "description": "string",
+            "duration": "string",
+            "end_time": "string",
+            "id": 0,
+            "start_time": "string",
+            "updated_at": "string",
+            "user_id": 0
+         }
+       ]
+       ````
 
 <center>Thanks for checking out my service.</center>

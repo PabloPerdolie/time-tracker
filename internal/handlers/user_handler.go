@@ -43,9 +43,41 @@ func (uh *userHandler) GetUsers(c *gin.Context) {
 	if name := c.Query("name"); name != "" {
 		filter["name"] = name
 	}
+	if passportNumber := c.Query("passport_number"); passportNumber != "" {
+		filter["passport_number"] = passportNumber
+	}
+	if passportSeries := c.Query("passport_series"); passportSeries != "" {
+		filter["passport_series"] = passportSeries
+	}
+	if patronymic := c.Query("patronymic"); patronymic != "" {
+		filter["patronymic"] = patronymic
+	}
+	if address := c.Query("address"); address != "" {
+		filter["address"] = address
+	}
 
-	offset := 0
-	limit := 10
+	var limit, offset int
+	offset1 := c.Query("offset")
+	if offset1 == "" {
+		offset1 = "0"
+	}
+	offset, err := strconv.Atoi(offset1)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	limit1 := c.Query("limit")
+	if limit1 == "" {
+		limit1 = "10"
+	}
+
+	limit, err = strconv.Atoi(limit1)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
 	users, err := uh.userService.GetUsers(filter, offset, limit)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
