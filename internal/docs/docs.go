@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/tasks/end": {
+        "/tasks/end/{id}/{taskId}": {
             "post": {
                 "description": "End an existing task with the given details",
                 "consumes": [
@@ -30,13 +30,18 @@ const docTemplate = `{
                 "summary": "End a task",
                 "parameters": [
                     {
-                        "description": "Task data",
-                        "name": "task",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.Task"
-                        }
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "taskId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -63,7 +68,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tasks/start": {
+        "/tasks/start/{id}": {
             "post": {
                 "description": "Start a new task with the given details",
                 "consumes": [
@@ -78,12 +83,19 @@ const docTemplate = `{
                 "summary": "Start a new task",
                 "parameters": [
                     {
-                        "description": "Task data",
-                        "name": "task",
+                        "type": "integer",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Task description",
+                        "name": "description",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Task"
+                            "type": "string"
                         }
                     }
                 ],
@@ -111,7 +123,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/tasks/{id}/users": {
+        "/tasks/user/{id}": {
             "get": {
                 "description": "Get a list of tasks for a specific user within an optional date range",
                 "produces": [
@@ -182,14 +194,26 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User Surname",
+                        "description": "User surname",
                         "name": "surname",
                         "in": "query"
                     },
                     {
                         "type": "string",
-                        "description": "UserName",
+                        "description": "User name",
                         "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
                         "in": "query"
                     }
                 ],
@@ -277,7 +301,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.User"
+                            "$ref": "#/definitions/handlers.Passport"
                         }
                     }
                 ],
@@ -351,6 +375,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "handlers.Passport": {
+            "type": "object",
+            "properties": {
+                "passportNumber": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Task": {
             "type": "object",
             "properties": {
