@@ -1,4 +1,3 @@
--- 002_insert_data.sql
 INSERT INTO users (passport_series, passport_number, surname, name, patronymic, address, created_at, updated_at) VALUES
     ('1234', '123456', 'Ivanov', 'Ivan', 'Ivanovich', '123 Main St', NOW(), NOW()),
     ('2345', '234567', 'Petrov', 'Petr', 'Petrovich', '456 Elm St', NOW(), NOW()),
@@ -12,7 +11,7 @@ INSERT INTO users (passport_series, passport_number, surname, name, patronymic, 
     ('7890', '012345', 'Nikolaev', 'Nikolai', 'Nikolaevich', '707 Willow St', NOW(), NOW());
 
 INSERT INTO tasks (user_id, description, start_time, end_time, duration, created_at, updated_at) VALUES
-    (1, 'Task 1', NOW(), NOW() + INTERVAL '1 hour', '360', NOW(), NOW()),
+    (1, 'Task 1', NOW(), NOW() + INTERVAL '1 hour', '3600', NOW(), NOW()),
     (2, 'Task 2', NOW(), NOW() + INTERVAL '2 hours', '7200', NOW(), NOW()),
     (3, 'Task 3', NOW(), NOW() + INTERVAL '3 hours', '10800', NOW(), NOW()),
     (4, 'Task 4', NOW(), NOW() + INTERVAL '4 hours', '14400', NOW(), NOW()),
@@ -23,7 +22,7 @@ INSERT INTO tasks (user_id, description, start_time, end_time, duration, created
     (9, 'Task 9', NOW(), NOW() + INTERVAL '9 hours', '32400', NOW(), NOW()),
     (10, 'Task 10', NOW(), NOW() + INTERVAL '10 hours', '36000', NOW(), NOW()),
     (1, 'Task 11', NOW(), NOW() + INTERVAL '1 hour', '3600', NOW(), NOW()),
-    (2, 'Task 12', NOW(), NOW() + INTERVAL '2 hours', '720', NOW(), NOW()),
+    (2, 'Task 12', NOW(), NOW() + INTERVAL '2 hours', '7200', NOW(), NOW()),
     (3, 'Task 13', NOW(), NOW() + INTERVAL '3 hours', '10800', NOW(), NOW()),
     (4, 'Task 14', NOW(), NOW() + INTERVAL '4 hours', '14400', NOW(), NOW()),
     (5, 'Task 15', NOW(), NOW() + INTERVAL '5 hours', '18000', NOW(), NOW());
